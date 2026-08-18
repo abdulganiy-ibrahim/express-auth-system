@@ -22,9 +22,13 @@ export const signUp = async (req: Request<{}, {}, SignUpData>, res: Response) =>
 
 export const signIn = async (req: Request, res: Response) => {
   try {
-    const user = await authService.signIn(req.body);
+    const token = await authService.signIn(req.body);
 
-    return res.status(200).json(user)
+    res.cookie('accessToken', token);
+
+    return res.status(200).json({
+      message: 'Signed in successfull'
+    })
 
   } catch (error) {
     res.status(500).json({

@@ -2,6 +2,7 @@ import type { User, SignUpData, SignInData } from '../types/user.types.js';
 import * as authRepo from './auth.repository.js';
 import * as authValidator from './auth.validator.js';
 import { hashPassword, comparePassword } from '../utils/password.js';
+import { generateToken } from '../utils/jwt.js';
 
 export const getUsers = async () => {
   const users: User[] = await authRepo.getUsers();
@@ -53,8 +54,6 @@ export const signIn = async (data: SignInData) => {
 
   const updatedUser = await authRepo.updateLastLogin(existingEmail.id);
 
-  // strip the hashed password before returning the user
-  const { password, ...userWithoutPassword } = updatedUser;
-
-  return userWithoutPassword;
+  // pass id into generateToke and return the result
+  return generateToken(updatedUser.id);
 }

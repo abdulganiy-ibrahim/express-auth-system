@@ -3,10 +3,14 @@ import jwt from 'jsonwebtoken';
 const jwtSecret = process.env.JWT_SECRET
 
 if (!jwtSecret) {
-  throw new Error('JWT_SECRET is not define');
+  throw new Error('JWT_SECRET is not defined');
 }
 
-export const generateToken = async (userId: string): Promise<string> => {
+type AuthTokenPayload = {
+  sub: string;
+}
+
+export const generateToken = (userId: string): string => {
 
   const token = jwt.sign(
     {sub: userId},
@@ -15,4 +19,13 @@ export const generateToken = async (userId: string): Promise<string> => {
   )
 
   return token;
+}
+
+export const verifyToken = (token: string) => {
+  const decoded = jwt.verify(
+    token,
+    jwtSecret
+  ) as AuthTokenPayload;
+
+  return decoded;
 }
