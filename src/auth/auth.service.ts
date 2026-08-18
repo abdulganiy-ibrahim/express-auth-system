@@ -1,0 +1,60 @@
+import type { User, SignUpData, SignInData } from '../types/user.types.js';
+import * as authRepo from './auth.repository.js';
+import * as authValidator from './auth.validator.js';
+import { hashPassword, comparePassword } from '../utils/password.js';
+
+export const getUsers = async () => {
+  const users: User[] = await authRepo.getUsers();
+
+  return users;
+}
+
+export const signUp = async (data: SignUpData) => {
+  // validate input data
+  authValidator.validateSignUpInput(data);
+
+  // check if email already exist
+  const existingEmail = await authRepo.findUserByEmail(data.email);
+
+  if (existingEmail) {
+    throw new Error('Email already exists. Please use another email.');
+  }
+
+  const hashedPassword = await hashPassword(data.password);
+
+  const newSignUpData = {
+    ...data,
+    password: hashedPassword
+  }
+
+  // create user
+  const newUser: User = await authRepo.createUser(newSignUpData);
+
+  return newUser;
+}
+
+export const signIn = async (data: SignInData) => {
+  // validate data
+  authValidator.validateSignInData(data);
+
+  // check if the email exists
+  const existingEmail = await authRepo.findUserByEmail(data.email);
+
+  if (!existingEmail) {
+    throw new Error("Invalid email or password")
+  };
+
+  // compare the provided password against the hashed password in the db
+  const isPasswordValid = await comparePassword(data.password, existingEmail.password);
+
+  if (!isPasswordValid) {
+    throw new Error('Invalid email or password');
+  }
+
+  const updatedUser = await authRepo.updateLastLogin(existingEmail.id);
+
+  // strip the hashed password before returning the user
+  const { password, ...userWithoutPassword } = updatedUser;
+
+  return userWithoutPassword;
+}
