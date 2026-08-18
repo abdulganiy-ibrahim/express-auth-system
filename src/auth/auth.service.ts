@@ -1,4 +1,4 @@
-import type { User, SignUpData, SignInData } from '../types/user.types.js';
+import type { User, PublicUser, SignUpData, SignInData } from '../types/user.types.js';
 import * as authRepo from './auth.repository.js';
 import * as authValidator from './auth.validator.js';
 import { hashPassword, comparePassword } from '../utils/password.js';
@@ -56,4 +56,10 @@ export const signIn = async (data: SignInData) => {
 
   // pass id into generateToke and return the result
   return generateToken(updatedUser.id);
+}
+
+export const getUserById = async (userId: string) => {
+  const user = await authRepo.getUserById(userId);
+
+  return user;
 }
