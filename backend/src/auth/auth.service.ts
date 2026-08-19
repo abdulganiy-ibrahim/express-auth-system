@@ -1,4 +1,4 @@
-import type { User, PublicUser, SignUpData, SignInData } from '../types/user.types.js';
+import type { User, SignUpData, SignInData } from '../types/user.types.js';
 import * as authRepo from './auth.repository.js';
 import * as authValidator from './auth.validator.js';
 import { hashPassword, comparePassword } from '../utils/password.js';
@@ -12,19 +12,19 @@ export const getUsers = async () => {
 
 export const signUp = async (data: SignUpData) => {
   // validate input data
-  authValidator.validateSignUpInput(data);
+  const validatedData = authValidator.validateSignUpInput(data);
 
   // check if email already exist
-  const existingEmail = await authRepo.findUserByEmail(data.email);
+  const existingEmail = await authRepo.findUserByEmail(validatedData.email);
 
   if (existingEmail) {
     throw new Error('Email already exists. Please use another email.');
   }
 
-  const hashedPassword = await hashPassword(data.password);
+  const hashedPassword = await hashPassword(validatedData.password);
 
   const newSignUpData = {
-    ...data,
+    ...validatedData,
     password: hashedPassword
   }
 
@@ -36,17 +36,17 @@ export const signUp = async (data: SignUpData) => {
 
 export const signIn = async (data: SignInData) => {
   // validate data
-  authValidator.validateSignInData(data);
+  const validatedData = authValidator.validateSignInData(data);
 
   // check if the email exists
-  const existingEmail = await authRepo.findUserByEmail(data.email);
+  const existingEmail = await authRepo.findUserByEmail(validatedData.email);
 
   if (!existingEmail) {
     throw new Error("Invalid email or password")
   };
 
   // compare the provided password against the hashed password in the db
-  const isPasswordValid = await comparePassword(data.password, existingEmail.password);
+  const isPasswordValid = await comparePassword(validatedData.password, existingEmail.password);
 
   if (!isPasswordValid) {
     throw new Error('Invalid email or password');

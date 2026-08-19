@@ -23,14 +23,22 @@ export const validateSignUpInput = (data: SignUpData) => {
     throw new Error('Password must be a string');
   }
 
+  // normalize email to lower case
+  const normalizedEmail = email.trim().toLowerCase();
+
   // validate email format;
-  if (!emailRegex.test(email)) {
+  if (!emailRegex.test(normalizedEmail)) {
     throw new Error('Enter a valid email');
   }
 
   // validate password format and lenght
   if ( password.length < 8 ) {
     throw new Error('Password must have at least 8 characters');
+  }
+
+  return {
+    ...data,
+    email: normalizedEmail
   }
 }
 
@@ -51,13 +59,21 @@ export const validateSignInData = ( data: SignInData ) => {
     throw new Error('Password must be a string');
   }
 
+  // normalize email to lower case
+  const normalizedEmail = email.trim().toLowerCase();
+
   // validate email format;
-  if (!emailRegex.test(email)) {
+  if (!emailRegex.test(normalizedEmail)) {
     throw new Error('Enter a valid email');
   }
 
   // validate password format and lenght
   if ( password.length < 8 ) {
     throw new Error('Password must have at least 8 characters');
+  }
+
+  return {
+    ...data,
+    email: normalizedEmail
   }
 }

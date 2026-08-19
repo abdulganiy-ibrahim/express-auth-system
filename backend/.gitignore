@@ -2,4 +2,4 @@
 dist
 
 #evironment variables
-.env.local
+.env
