@@ -1,9 +1,9 @@
-import Image from "next/image";
+import { SignUpForm } from "@/components/signup";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <div>
-      <h1>Authentication system frontend</h1>
+    <div className="min-h-screen flex items-center justify-center mx-auto">
+      <SignUpForm />
     </div>
   );
 }

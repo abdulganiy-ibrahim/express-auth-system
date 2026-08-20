@@ -1,9 +1,13 @@
 import { pool } from '../config/db.js';
 import type { User, PublicUser, SignUpData } from '../types/user.types.js';
 
-export const getUsers = async (): Promise<User[]> => {
+export const getUsers = async (): Promise<PublicUser[]> => {
   
-  const result = await pool.query<User>('SELECT * FROM users');
+  const result = await pool.query<PublicUser>(
+    `
+      SELECT id, name, email, created_at, last_login FROM users
+    `
+  );
 
   return result.rows;
 }
