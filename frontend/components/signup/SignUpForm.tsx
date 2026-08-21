@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { toast } from 'sonner';
+import Link from "next/link";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -65,7 +66,7 @@ export default function SignUpForm() {
       className="max-w-5xl bgbackground-card border border-border rounded-xl py-4 px-6"
     >
       <section className="flex flex-col items-center gap-1">
-        <h1 className="text-primary text-2xl font-semibold">Authentication system</h1>
+        <h1 className="text-primary text-2xl uppercase font-semibold">Auth Showcase</h1>
         <p className="text-primary">Create your account in minute</p>
       </section>
 
@@ -120,7 +121,17 @@ export default function SignUpForm() {
         </div>
       </section>
       
-      
+      <section className="mt-10">
+        <p>
+          Already have an account!  
+          <Link 
+            href='/signin'
+            className="text-primary hover:border-b hover:border-primary"
+          >
+            Sign In
+          </Link>
+          </p>
+      </section>
     </form>
   )
 }

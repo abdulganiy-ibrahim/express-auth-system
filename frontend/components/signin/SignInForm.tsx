@@ -1,10 +1,12 @@
 'use client';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SignInForm() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -33,12 +35,14 @@ export default function SignInForm() {
         body: JSON.stringify(formData)
       })
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || 'Sign in Failed');
+        throw new Error(data.message || 'Sign in Failed');
       }
 
       toast.success('Signed in successful');
+      router.push(`/dashboard/${data.userId}`);
     } catch (error) {
       toast.error(
         error instanceof Error ?

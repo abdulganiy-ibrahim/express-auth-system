@@ -1,17 +1,6 @@
 import { pool } from '../config/db.js';
 import type { User, PublicUser, SignUpData } from '../types/user.types.js';
 
-export const getUsers = async (): Promise<PublicUser[]> => {
-  
-  const result = await pool.query<PublicUser>(
-    `
-      SELECT id, name, email, created_at, last_login FROM users
-    `
-  );
-
-  return result.rows;
-}
-
 export const createUser = async (data: SignUpData) => {
   const { name, email, password } = data;
 

@@ -1,0 +1,1 @@
+export { default as GetInitials } from './GetInitialByName';
