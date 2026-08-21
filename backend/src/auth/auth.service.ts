@@ -57,9 +57,3 @@ export const signIn = async (data: SignInData) => {
     userId: updatedUser.id
   };
 }
-
-export const getUserById = async (userId: string) => {
-  const user = await authRepo.getUserById(userId);
-
-  return user;
-}

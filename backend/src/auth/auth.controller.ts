@@ -35,26 +35,6 @@ export const signIn = async (req: Request, res: Response) => {
   }
 }
 
-export const getUserById = async (req: Request, res: Response) => {
-  try {
-    const userId = req.userId;
-
-    if (!userId) {
-      return res.status(401).json({
-        message: 'Authentication required'
-      });
-    }
-
-    const userData = await authService.getUserById(userId);
-
-    return res.status(200).json(userData);
-  } catch (error) {
-    return res.status(500).json({
-      message: error instanceof Error ? error.message : 'Something went wrong'
-    });
-  }
-}
-
 export const signOut = (req: Request, res: Response) => {
   try {
     res.clearCookie('accessToken');

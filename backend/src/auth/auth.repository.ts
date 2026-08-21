@@ -40,14 +40,3 @@ export const updateLastLogin = async (userId: string): Promise<User> => {
 
   return result.rows[0];
 }
-
-export const getUserById = async (userId: string): Promise<PublicUser | undefined> => {
-  const result = await pool.query<PublicUser>(
-    `
-      SELECT id, name, email, created_at, last_login FROM users
-      WHERE id = $1
-    `, [userId]
-  );
-
-  return result.rows[0];
-}
