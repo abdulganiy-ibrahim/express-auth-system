@@ -42,7 +42,7 @@ export const getUserById = async (req: Request, res: Response) => {
     if (!userId) {
       return res.status(401).json({
         message: 'Authentication required'
-      })
+      });
     }
 
     const userData = await authService.getUserById(userId);

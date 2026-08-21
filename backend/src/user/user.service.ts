@@ -6,3 +6,9 @@ export const getUsers = async () => {
 
   return users
 }
+
+export const getUserById = async (userId: string) => {
+  const user = await userRepo.getUserById(userId);
+
+  return user;
+}
