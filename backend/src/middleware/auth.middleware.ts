@@ -6,19 +6,18 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
+
+  // get token from cookie
+  const token = req.cookies.accessToken;
+
+  // handle if no token
+  if (!token) {
+    return res.status(401).json({
+      message: 'Authentication require'
+    })
+  }
+
   try {
-    // get token from cookie
-    const token = req.cookies.accessToken;
-
-    console.log("TOKEN:", token);
-
-    // handle if no token
-    if (!token) {
-      return res.status(401).json({
-        message: 'Authentication require'
-      })
-    }
-
     // verify token
     const payload = verifyToken(token);
 

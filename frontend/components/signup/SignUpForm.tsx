@@ -57,6 +57,11 @@ export default function SignUpForm() {
       )
     } finally {
       setIsLoading(false);
+      setFormData({
+        name: '',
+        email: '',
+        password: ''
+      })
     }
   }
 

@@ -12,3 +12,9 @@ export const getUserById = async (userId: string) => {
 
   return user;
 }
+
+export const deleteUserById = async (userId: string) => {
+  const deletedUser = await userRepo.deleteUserById(userId);
+
+  return deletedUser;
+}

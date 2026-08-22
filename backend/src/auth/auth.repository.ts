@@ -1,5 +1,5 @@
 import { pool } from '../config/db.js';
-import type { User, PublicUser, SignUpData } from '../types/user.types.js';
+import type { User, SignUpData } from '../types/user.types.js';
 
 export const createUser = async (data: SignUpData) => {
   const { name, email, password } = data;

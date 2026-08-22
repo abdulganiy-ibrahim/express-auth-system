@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { getUsers } from "./user.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
-import { getUserById } from "./user.repository.js";
+import { getUsers, getUserById, deleteUserById } from "./user.controller.js";
+
 
 const router = Router();
 
 router.get('/', getUsers);
 router.get('/:id', authMiddleware, getUserById);
+router.delete('/:id', authMiddleware, deleteUserById)
 
 export default router;

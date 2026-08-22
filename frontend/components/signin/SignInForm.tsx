@@ -29,6 +29,7 @@ export default function SignInForm() {
     try {
       const res = await fetch(`${apiUrl}/api/auth/signin`, {
         method: 'POST',
+        credentials: "include",
         headers: {
           "Content-Type": "application/json"
         },
@@ -51,6 +52,10 @@ export default function SignInForm() {
       )
     } finally {
       setIsLoading(false);
+      setFormData({
+        email: '',
+        password: ''
+      })
     }
   }
   return (

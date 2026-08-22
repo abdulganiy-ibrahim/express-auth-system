@@ -1,10 +1,28 @@
 import Link from "next/link";
 import { LockIcon } from "lucide-react";
+import { notFound } from "next/navigation";
+import { getUserById } from "@/lib/data/user.data";
 import {
   AnalyticsCard, ProjectCard, ChangePasswordForm
 } from "@/components/dashboard/profile";
 
-export default function ProfilePage() {
+type DashboardProps = {
+  params: Promise<{
+    userId: string
+  }>
+}
+
+export default async function Dashboard({ params }: DashboardProps) {
+  const { userId } = await params;
+
+  if (!userId) {
+    return notFound();
+  }
+
+  const user = await getUserById(userId);
+
+  console.log(user);
+  
   return (
     <div className="p-2">
       <section>

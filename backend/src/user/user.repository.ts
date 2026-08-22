@@ -14,8 +14,20 @@ export const getUsers = async (): Promise<PublicUser[]> => {
 export const getUserById = async (userId: string): Promise<PublicUser | undefined> => {
   const result = await pool.query<PublicUser>(
     `
-      SELECT id, name, email, created_at, last_login From users
+      SELECT id, name, email, created_at, last_login FROM users
       WHERE id = $1
+    `, [userId]
+  );
+
+  return result.rows[0];
+}
+
+export const deleteUserById = async (userId: string): Promise<PublicUser | undefined> => {
+  const result = await pool.query<PublicUser>(
+    `
+      DELETE FROM users 
+      where id = $1
+      RETURNING id, name, email, created_at, last_login
     `, [userId]
   );
 
