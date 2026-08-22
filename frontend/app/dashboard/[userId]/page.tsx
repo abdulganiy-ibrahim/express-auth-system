@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { LockIcon } from "lucide-react";
-import { notFound } from "next/navigation";
 import { getUserById } from "@/lib/data/user.data";
+import { redirect } from "next/navigation";
 import {
-  AnalyticsCard, ProjectCard, ChangePasswordForm
+  UserDataCard, ProjectCard, ChangePasswordForm
 } from "@/components/dashboard/profile";
 
 type DashboardProps = {
@@ -15,18 +15,12 @@ type DashboardProps = {
 export default async function Dashboard({ params }: DashboardProps) {
   const { userId } = await params;
 
-  if (!userId) {
-    return notFound();
-  }
-
-  const user = await getUserById(userId);
-
-  console.log(user);
+  const user = await getUserById(userId);  
   
   return (
     <div className="p-2">
       <section>
-        <AnalyticsCard />
+        <UserDataCard userData={user} />
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
