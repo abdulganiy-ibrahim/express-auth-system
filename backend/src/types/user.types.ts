@@ -25,3 +25,19 @@ export interface SignInData {
   email: string;
   password: string;
 }
+
+export interface Project {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  technologies: string[];
+  created_at: Date;
+}
+
+export interface CreateProjectData {
+  userId: string;
+  title: string;
+  description: string;
+  technologies: string[];
+}
