@@ -23,7 +23,8 @@ export default function UserDataCard({userData}: UserDataCardProps) {
         </div>
 
         <div>
-          <p className="text-muted-foreground text-base">{formatDate(userData.created_at)}</p>
+          <p className="text-muted-foreground text-base">{formatDate(userData.created_at
+          )}</p>
         </div>
       </div>
     </div>

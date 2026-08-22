@@ -28,11 +28,11 @@ export interface SignInData {
 
 export interface Project {
   id: string;
-  user_id: string;
+  userId: string;
   title: string;
   description: string;
   technologies: string[];
-  created_at: Date;
+  createdAt: Date;
 }
 
 export interface CreateProjectData {

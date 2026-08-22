@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LockIcon } from "lucide-react";
 import { getUserById } from "@/lib/data/user.data";
-import { redirect } from "next/navigation";
+import { getProjects } from "@/lib/data/project.data";
 import {
   UserDataCard, ProjectCard, ChangePasswordForm
 } from "@/components/dashboard/profile";
@@ -15,7 +15,8 @@ type DashboardProps = {
 export default async function Dashboard({ params }: DashboardProps) {
   const { userId } = await params;
 
-  const user = await getUserById(userId);  
+  const user = await getUserById(userId);
+  const projects = await getProjects();  
   
   return (
     <div className="p-2">
@@ -37,7 +38,7 @@ export default async function Dashboard({ params }: DashboardProps) {
           </div>
 
           <div className="mt-2">
-            <ProjectCard />
+            <ProjectCard projects={projects}/>
           </div>
         </section>
 
