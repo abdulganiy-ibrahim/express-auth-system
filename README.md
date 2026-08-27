@@ -5,6 +5,11 @@ A full-stack authentication system I'm building with **Express.js** and **Next.j
 The goal of this project is to understand authentication beyond just creating a login form. I'm building the backend API, implementing the authentication logic, and connecting it to a separate frontend application.
 
 ## What I've built
+* Signup API for creating user account
+* Signin API for login
+* Middleware to authenticate users for protected routes
+* CRUD too get and create, users and projects.
+* Sign out for ending user session
 
 ### Backend
 
