@@ -8,7 +8,7 @@ export const getProjects = async (): Promise<Project[]> => {
   const accessToken = cookieStore.get('accessToken')?.value;
 
   try {
-    const res = await fetch(`${apiUrl}/api/project`, {
+    const res = await fetch(`${apiUrl}/api/projects`, {
       headers: {
         cookie: `accessToken=${accessToken}`
       }

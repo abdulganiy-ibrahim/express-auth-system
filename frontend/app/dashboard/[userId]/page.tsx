@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { LockIcon } from "lucide-react";
 import { getUserById } from "@/lib/data/user.data";
 import { getProjects } from "@/lib/data/project.data";
 import {
-  UserDataCard, ProjectCard, ChangePasswordForm
+  UserDataCard, Projects, ChangePasswordForm
 } from "@/components/dashboard/profile";
 
 type DashboardProps = {
@@ -25,30 +24,10 @@ export default async function Dashboard({ params }: DashboardProps) {
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <section className="bg-background-card rounded-lg border border-border shadow-md p-4 mt-4">
-          <div className="flex items-center justify-between">
-            <h1 className="font-bold text-lg">Your Projects</h1>
 
-            <Link
-              href={`/dashboard`}
-              className="text-primary text-lg hover:border-b hover:border-primary transition-all duration-300"
-            >
-              View all
-            </Link>
-          </div>
-
-          <div className="mt-2">
-            <ProjectCard projects={projects}/>
-          </div>
-
-          <div className="mt-5">
-            <button
-              className="bg-primary/20 text-primary border border-primary rounded-lg w-full p-2"
-            >
-              Add Projects
-            </button>
-          </div>
-        </section>
+        <div>
+          <Projects projects={projects} />
+        </div>
 
         <section className="bg-background-card rounded-lg border border-border shadow-md p-4 mt-4">
           <div className="flex items-center justify-between">
