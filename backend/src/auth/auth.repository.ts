@@ -1,5 +1,6 @@
 import { pool } from '../config/db.js';
-import type { User, SignUpData } from '../types/user.types.js';
+import type { User} from '../types/user.types.js';
+import type { ChangePasswordData, NewPasswordData, SignUpData } from '../types/auth.types.js';
 
 export const createUser = async (data: SignUpData) => {
   const { name, email, password } = data;
@@ -37,6 +38,31 @@ export const updateLastLogin = async (userId: string): Promise<User> => {
       RETURNING *
     `, [userId]
   )
+
+  return result.rows[0];
+}
+
+export const getUserPasswordById = async (userId: string): Promise<string> => {
+  const result = await pool.query(
+    `
+      SELECT password FROM users
+      WHERE id = $1
+    `, [userId]
+  );
+
+  return result.rows[0]?.password;
+}
+
+export const ChangePassword = async (data: NewPasswordData) => {
+  const { password, userId } = data;
+
+  const result = await pool.query(
+    `
+      UPDATE users
+      SET password = $1
+      WHERE id = $2
+    `, [password, userId]
+  );
 
   return result.rows[0];
 }

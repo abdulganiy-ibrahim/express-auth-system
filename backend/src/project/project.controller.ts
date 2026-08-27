@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import type { CreateProjectData, Project } from '../types/user.types.js';
+import type { CreateProjectData, Project } from '../types/project.types.js';
 import * as userService from '../user/user.service.js';
 import * as projectService from './project.service.js';
 

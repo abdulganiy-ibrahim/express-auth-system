@@ -1,6 +1,7 @@
-import type { SignUpData, SignInData } from '../types/user.types.js';
+import type { SignUpData, SignInData, ChangePasswordData } from '../types/auth.types.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
 export const validateSignUpInput = (data: SignUpData) => {
   const { name, email, password } = data;
@@ -34,6 +35,12 @@ export const validateSignUpInput = (data: SignUpData) => {
   // validate password format and lenght
   if ( password.length < 8 ) {
     throw new Error('Password must have at least 8 characters');
+  }
+
+  if (!passwordRegex.test(password)) {
+    throw new Error(
+      'Password must be at least 8 characters and contain a number and special character'
+    );
   }
 
   return {
@@ -75,5 +82,38 @@ export const validateSignInData = ( data: SignInData ) => {
   return {
     ...data,
     email: normalizedEmail
+  }
+}
+
+export const validateChangePassword = ( data: ChangePasswordData) => {
+  const { oldPassword, newPassword } = data;
+
+  if (!oldPassword || !newPassword) {
+    throw new Error('All fields are required');
+  }
+
+  if (
+    typeof oldPassword !== 'string' || 
+    typeof newPassword !== 'string'
+  ) {
+    throw new Error('Invalid password data');
+  }
+
+  if (oldPassword === newPassword) {
+    throw new Error('Try enter a new password');
+  }
+
+  if ( newPassword.length < 8 ) {
+    throw new Error('Password must have at least 8 characters');
+  }
+
+  if (!passwordRegex.test(newPassword)) {
+    throw new Error(
+      'Password must be at least 8 characters and contain a number and special character'
+    );
+  }
+
+  return {
+    ...data
   }
 }

@@ -8,7 +8,6 @@ type ProjectListProps = {
 
 export default function ProjectCard({projects}: ProjectListProps) {
 
-  console.log(projects)
   return (
     <>
       {

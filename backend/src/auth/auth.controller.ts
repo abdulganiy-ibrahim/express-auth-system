@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { User, SignUpData } from '../types/user.types.js';
+import type { ChangePasswordData, SignUpData } from '../types/auth.types.js';
 import * as authService from './auth.service.js';
 
 export const signUp = async (req: Request<{}, {}, SignUpData>, res: Response) => {
@@ -46,5 +46,32 @@ export const signOut = (req: Request, res: Response) => {
     return res.status(500).json({
       message: error instanceof Error ? error.message : 'Something went wrong'
     })
+  }
+}
+
+export const ChangePassword = async (req: Request<{}, {}, ChangePasswordData>, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    if (!userId) {
+      return res.status(401).json({
+        message: 'Authentication required'
+      });
+    }
+
+    const passwordData = {
+      data: req.body,
+      userId
+    }
+
+    await authService.ChangePassword(passwordData);
+
+    return res.status(200).json({
+      message: "Password changed successfully"
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error instanceof Error ? error.message : 'Something went wrong'
+    });
   }
 }

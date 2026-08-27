@@ -1,4 +1,4 @@
-import type { CreateProjectData, Project } from '../types/user.types.js';
+import type { CreateProjectData, Project } from '../types/project.types.js';
 import * as projectRepo from './project.repository.js';
 import { validateProjectData } from './project.validator.js';
 

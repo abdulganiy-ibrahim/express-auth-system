@@ -1,19 +1,16 @@
 "use client"
 import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useParams, notFound } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard,
   Package,
-  ShoppingCart,
-  ChevronRight,
-  ArrowRight,
-  BarChart3,
   Settings,
   LogOut 
 } from "lucide-react";
 import { useState } from 'react';
 import { AuthLogoName } from '../brand';
+import { useLogout } from '@/hooks/useLogout';
 
 type menuButtonProps = {
   userId: string;
@@ -22,6 +19,7 @@ type menuButtonProps = {
 export default function MenuButton({ userId }: menuButtonProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { logout, isLoading } = useLogout();
 
   type NavLink = {
     href: string,
@@ -85,12 +83,14 @@ export default function MenuButton({ userId }: menuButtonProps) {
 
             <section>
               <button
+                onClick={logout}
+                disabled={isLoading}
                 className='flex items-center gap-2 p-2 rounded-md bg-red-400 text-white w-full cursor-pointer'
               >
                 <LogOut size={18} />
 
                 <span>
-                  Sign Out
+                  {isLoading ? 'Logging out' : 'Log Out'}
                 </span>
               </button>
             </section>

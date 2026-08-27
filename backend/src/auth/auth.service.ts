@@ -1,6 +1,8 @@
-import type { User, PublicUser, SignUpData, SignInData } from '../types/user.types.js';
+import type { User, PublicUser } from '../types/user.types.js';
+import type { SignUpData, SignInData, ChangePasswordData } from '../types/auth.types.js';
 import * as authRepo from './auth.repository.js';
 import * as authValidator from './auth.validator.js';
+import * as userRepo from '../user/user.repository.js';
 import { hashPassword, comparePassword } from '../utils/password.js';
 import { generateToken } from '../utils/jwt.js';
 
@@ -56,4 +58,33 @@ export const signIn = async (data: SignInData) => {
     token: token,
     userId: updatedUser.id
   };
+}
+
+export const ChangePassword = async ({ data, userId}: {data: ChangePasswordData, userId: string}) => {
+  const validatedData = authValidator.validateChangePassword(data);
+
+  // get user by user ID
+  const userPassword = await authRepo.getUserPasswordById(userId);
+
+  if (!userPassword) {
+    throw new Error("User doesn't exist");
+  }
+
+  // compare userPassword with the old password from user input
+  const validPassword = await comparePassword(validatedData.oldPassword, userPassword);
+
+  if (!validPassword) {
+    throw new Error('Wrong password');
+  }
+
+  // hash new dashboard
+  const hashedNewPassword = await hashPassword(validatedData.newPassword);
+
+  // construct new password data. 
+  const newPasswordData = {
+    password: hashedNewPassword,
+    userId
+  }
+
+  await authRepo.ChangePassword(newPasswordData);
 }

@@ -40,6 +40,14 @@ export default async function Dashboard({ params }: DashboardProps) {
           <div className="mt-2">
             <ProjectCard projects={projects}/>
           </div>
+
+          <div className="mt-5">
+            <button
+              className="bg-primary/20 text-primary border border-primary rounded-lg w-full p-2"
+            >
+              Add Projects
+            </button>
+          </div>
         </section>
 
         <section className="bg-background-card rounded-lg border border-border shadow-md p-4 mt-4">

@@ -1,5 +1,5 @@
 import { pool } from '../config/db.js';
-import type { CreateProjectData, Project } from '../types/user.types.js';
+import type { CreateProjectData, Project } from '../types/project.types.js';
 
 export const creeatProject = async (projectData: CreateProjectData): Promise<Project> => {
   const { userId, title, description, technologies} = projectData;
