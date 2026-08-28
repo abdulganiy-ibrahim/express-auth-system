@@ -25,3 +25,14 @@ export const getProjectsByUserId = async (userId: string) => {
 
   return result.rows;
 }
+
+export const deleteProjectById = async (projectId: number) => {
+  const result = await pool.query(
+    `
+      DELETE FROM projects
+      WHERE id = $1
+    `, [projectId]
+  )
+
+  return result.rowCount;
+}

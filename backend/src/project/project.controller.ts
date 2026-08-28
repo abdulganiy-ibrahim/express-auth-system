@@ -58,3 +58,27 @@ export const getProjectsByUserId = async (req: Request, res: Response) => {
     });
   }
 }
+
+export const deleteProject = async (req: Request, res: Response) => {
+  const projectId = Number(req.params.id);
+  const userId = req.userId;
+
+  try {
+    if (!userId) {
+      return res.status(401).json({
+        message: 'Authentication required'
+      });
+    }
+
+    await projectService.deleteProject(projectId);
+
+    return res.status(204).json({
+      message: 'Project deleted successfully'
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unexpected error'
+    });
+  }
+
+}

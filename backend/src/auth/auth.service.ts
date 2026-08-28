@@ -88,3 +88,4 @@ export const ChangePassword = async ({ data, userId}: {data: ChangePasswordData,
 
   await authRepo.ChangePassword(newPasswordData);
 }
+
