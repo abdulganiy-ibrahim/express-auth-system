@@ -1,12 +1,18 @@
-export default function AuthLogoName() {
+interface AuthLogoNameProps {
+  collapsed?: boolean;
+}
+
+export default function AuthLogoName({ collapsed = false }: AuthLogoNameProps) {
   return (
     <div className="flex items-center gap-2">
-      <div 
-        className="h-10 w-10 bg-linear-to-br from-primary to-accent-500 text-xl lg:text-2xl text-white font-bold flex justify-around items-center rounded-lg"
-      >
+      <div className="flex h-10 w-10 shrink-0 items-center justify-around rounded-lg bg-linear-to-br from-primary to-accent-500 text-xl font-bold text-white lg:text-2xl">
         AS
       </div>
-      <h1 className="text-xl lg:text-2xl font-bold text-foreground">Auth Showcase</h1>
+      {!collapsed && (
+        <h1 className="whitespace-nowrap text-xl font-bold text-foreground lg:text-2xl">
+          Auth Showcase
+        </h1>
+      )}
     </div>
-  )
+  );
 }

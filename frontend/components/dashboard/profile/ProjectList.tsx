@@ -6,8 +6,8 @@ import { formatDate } from '@/utils';
 
 type ProjectListProps = {
   projects: Project[];
-  onEdit?: (project: Project) => void;
-  onDelete?: (project: Project) => void;
+  onEdit?: (projectId: string) => void;
+  onDelete?: (projectId: string) => void;
 };
 
 export default function ProjectList({ projects, onEdit, onDelete }: ProjectListProps) {
@@ -38,7 +38,7 @@ export default function ProjectList({ projects, onEdit, onDelete }: ProjectListP
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                onClick={() => onEdit?.(p)}
+                onClick={() => onEdit?.(p.id)}
                 aria-label={`Edit ${p.title}`}
                 className="group relative rounded-lg p-2 text-muted-foreground cursor-pointer transition-colors hover:bg-primary/10 hover:text-primary"
               >
@@ -50,7 +50,7 @@ export default function ProjectList({ projects, onEdit, onDelete }: ProjectListP
 
               <button
                 type="button"
-                onClick={() => onDelete?.(p)}
+                onClick={() => onDelete?.(p.id)}
                 aria-label={`Delete ${p.title}`}
                 className="group relative rounded-lg p-2 text-muted-foreground cursor-pointer transition-colors hover:bg-red-50 hover:text-red-600"
               >

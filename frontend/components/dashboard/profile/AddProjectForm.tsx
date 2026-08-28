@@ -1,5 +1,6 @@
 'use client';
 import { useState, type KeyboardEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
 import { Modal } from '@/components/ui';
 import { toast } from 'sonner';
@@ -25,6 +26,7 @@ const INITIAL_FORM_DATA: ProjectFormData = {
 };
 
 export default function AddProjectForm({ modalOpen, onClose, onCreated }: AddProjectFormProps) {
+  const router = useRouter();
   const [projectData, setProjectData] = useState<ProjectFormData>(INITIAL_FORM_DATA);
   const [techInput, setTechInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -115,6 +117,7 @@ export default function AddProjectForm({ modalOpen, onClose, onCreated }: AddPro
       onCreated?.(created);
       resetForm();
       onClose?.();
+      router.refresh();
       toast.success('Your project has been created');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.');

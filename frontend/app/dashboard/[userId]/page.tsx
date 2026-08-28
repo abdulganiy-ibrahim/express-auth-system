@@ -26,7 +26,10 @@ export default async function Dashboard({ params }: DashboardProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
 
         <div>
-          <Projects projects={projects} />
+          <Projects 
+            projects={projects} 
+            userId={userId}
+          />
         </div>
 
         <section className="bg-background-card rounded-lg border border-border shadow-md p-4 mt-4">
