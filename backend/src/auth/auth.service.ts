@@ -1,10 +1,14 @@
-import type { User, PublicUser } from '../types/user.types.js';
-import type { SignUpData, SignInData, ChangePasswordData } from '../types/auth.types.js';
+import type { PublicUser } from '../types/user.types.js';
+import type { 
+  SignUpData, SignInData, ChangePasswordData 
+} from '../types/auth.types.js';
+import * as emailVerificationService from '../email/email-verification.service.js';
+import * as emailService from '../email/email.service.js';
+import { generateToken } from '../utils/jwt.js';
+import { hashPassword, comparePassword } from '../utils/password.js';
 import * as authRepo from './auth.repository.js';
 import * as authValidator from './auth.validator.js';
-import * as userRepo from '../user/user.repository.js';
-import { hashPassword, comparePassword } from '../utils/password.js';
-import { generateToken } from '../utils/jwt.js';
+
 
 
 export const signUp = async (data: SignUpData) => {
@@ -26,7 +30,11 @@ export const signUp = async (data: SignUpData) => {
   }
 
   // create user
-  const newUser: User = await authRepo.createUser(newSignUpData);
+  const newUser: PublicUser = await authRepo.createUser(newSignUpData);
+
+  const verificationToken = await emailVerificationService.createVerificationToken(newUser.id);
+
+  await emailService.sendVerificationEmail(newUser.id, verificationToken);
 
   return newUser;
 }

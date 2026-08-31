@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import type { ChangePasswordData, SignUpData } from '../types/auth.types.js';
 import * as authService from './auth.service.js';
+import * as emailVerificationService from '../email/email-verification.service.js';
 
 export const signUp = async (req: Request<{}, {}, SignUpData>, res: Response) => {
   try {
@@ -13,6 +14,43 @@ export const signUp = async (req: Request<{}, {}, SignUpData>, res: Response) =>
     });
   }
 }
+
+export const verifyEmail = async (req: Request, res: Response) => {
+  const token = req.query.token;
+
+  console.log(token);
+
+  if (typeof token !== 'string') {
+    return res.status(400).json({
+      message: 'Invalid verification token'
+    });
+  }
+
+  await emailVerificationService.verifyToken(token);
+
+  return res.status(200).json({
+    message: 'Your email has been verified'
+  });
+}
+
+export const resendEmailVerification = async (
+  req: Request,
+  res: Response
+) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({
+      message: 'Email is required'
+    });
+  }
+
+  await emailVerificationService.resendEmailVerification(email);
+
+  return res.status(200).json({
+    message: 'If an account with that email exists, a verification email has been sent.'
+  });
+};
 
 export const signIn = async (req: Request, res: Response) => {
   try {

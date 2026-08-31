@@ -5,6 +5,7 @@ export interface User {
   password: string;
   created_at: Date;
   last_login: Date | null;
+  email_verified: boolean;
 }
 
 export interface PublicUser {
@@ -13,4 +14,5 @@ export interface PublicUser {
   email: string;
   created_at: Date;
   last_login: Date | null;
+  email_verified: boolean;
 }

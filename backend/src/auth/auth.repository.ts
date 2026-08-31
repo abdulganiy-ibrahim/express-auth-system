@@ -1,6 +1,6 @@
 import { pool } from '../config/db.js';
 import type { User} from '../types/user.types.js';
-import type { ChangePasswordData, NewPasswordData, SignUpData } from '../types/auth.types.js';
+import type { NewPasswordData, SignUpData } from '../types/auth.types.js';
 
 export const createUser = async (data: SignUpData) => {
   const { name, email, password } = data;
@@ -16,6 +16,25 @@ export const createUser = async (data: SignUpData) => {
 
   return result.rows[0]!;
 }
+
+export const verifyUserEmail = async (userId: string) => {
+  console.log(userId);
+
+  const result = await pool.query(
+    `
+      UPDATE users
+      SET email_verified = TRUE
+      WHERE id = $1
+      RETURNING id, email_verified
+    `, [userId]
+  );
+
+  if (result.rows.length === 0) {
+    throw new Error('User not found');
+  }
+
+  return result.rows[0];
+}; 
 
 export const findUserByEmail = async (email: string): Promise<User | undefined> => {
   const result = await pool.query<User>(
