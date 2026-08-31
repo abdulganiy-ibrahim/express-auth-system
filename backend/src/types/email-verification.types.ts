@@ -6,7 +6,7 @@ export interface CreateEmailVerificationData {
 
 export interface EmailVerificationData {
   id: string;
-  user_id: string;
+  userId: string;
   token: string;
   createdAt: Date;
   expiresAt: Date;

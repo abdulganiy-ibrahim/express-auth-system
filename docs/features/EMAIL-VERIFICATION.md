@@ -1,4 +1,4 @@
-## Decision: Email Verification
+## Email Verification
 
 ### Problem
 

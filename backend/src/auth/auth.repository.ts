@@ -18,7 +18,6 @@ export const createUser = async (data: SignUpData) => {
 }
 
 export const verifyUserEmail = async (userId: string) => {
-  console.log(userId);
 
   const result = await pool.query(
     `

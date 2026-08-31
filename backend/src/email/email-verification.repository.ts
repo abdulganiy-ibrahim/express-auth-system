@@ -21,7 +21,13 @@ export const getEmailVerificationDataByToken = async (token: string): Promise<Em
 
   const result = await pool.query<EmailVerificationData>(
     `
-      SELECT * FROM email_verification_tokens
+      SELECT 
+        id,
+        user_id AS "userId",
+        token,
+        created_at AS "createdAt",
+        expires_at As "expiresAt" 
+      FROM email_verification_tokens
       WHERE token = $1
     `, [token]
   )

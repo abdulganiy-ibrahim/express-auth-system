@@ -54,7 +54,7 @@ export const verifyToken = async (token: string) => {
   }
 
   // Mark user's email as verified
-  await authRepo.verifyUserEmail(validTokenData.user_id);
+  await authRepo.verifyUserEmail(validTokenData.userId);
 
   // Delete the token so it cannot be used again
   await emailVerificationRepo.deleteEmailVerificationToken(
