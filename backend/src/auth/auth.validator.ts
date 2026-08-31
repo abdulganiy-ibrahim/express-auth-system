@@ -1,3 +1,4 @@
+import { AppError } from '../errors/AppError.js';
 import type { SignUpData, SignInData, ChangePasswordData } from '../types/auth.types.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -8,20 +9,20 @@ export const validateSignUpInput = (data: SignUpData) => {
 
   // check if all required fields is provided;
   if ( !name || !email || !password ) {
-    throw new Error('All fields are required');
+    throw new AppError('All fields are required', 400);
   }
 
   //check if type of input are correct;
   if ( typeof name !== 'string' ) {
-    throw new Error('Name must be a string');
+    throw new AppError('Please enter your username', 400);
   }
 
   if ( typeof email !== 'string' ) {
-    throw new Error('Email must be a string');
+    throw new AppError('Please enter a valid email', 400);
   }
 
   if ( typeof password !== 'string' ) {
-    throw new Error('Password must be a string');
+    throw new AppError('Please enter your password', 400);
   }
 
   // normalize email to lower case
@@ -29,17 +30,17 @@ export const validateSignUpInput = (data: SignUpData) => {
 
   // validate email format;
   if (!emailRegex.test(normalizedEmail)) {
-    throw new Error('Enter a valid email');
+    throw new AppError('please enter a valid email', 400);
   }
 
   // validate password format and lenght
   if ( password.length < 8 ) {
-    throw new Error('Password must have at least 8 characters');
+    throw new AppError('Password must have at least 8 characters', 400);
   }
 
   if (!passwordRegex.test(password)) {
-    throw new Error(
-      'Password must be at least 8 characters and contain a number and special character'
+    throw new AppError(
+      'Please enter a strong password', 400
     );
   }
 
@@ -54,16 +55,16 @@ export const validateSignInData = ( data: SignInData ) => {
 
   // check if required fields are provide
   if ( !email || !password ) {
-    throw new Error('All fields are required');
+    throw new AppError('All fields are required', 400);
   }
 
   // make sure type of email and password is string in RUNTIME
   if ( typeof email !== 'string' ) {
-    throw new Error('Email must be a string');
+    throw new AppError('Please enter a valid email address', 400);
   }
 
   if ( typeof password !== 'string' ) {
-    throw new Error('Password must be a string');
+    throw new AppError('Please enter your password', 400);
   }
 
   // normalize email to lower case
@@ -71,12 +72,12 @@ export const validateSignInData = ( data: SignInData ) => {
 
   // validate email format;
   if (!emailRegex.test(normalizedEmail)) {
-    throw new Error('Enter a valid email');
+    throw new AppError('Please enter a valid email address', 400);
   }
 
   // validate password format and lenght
   if ( password.length < 8 ) {
-    throw new Error('Password must have at least 8 characters');
+    throw new AppError('Password must contain at least 8 characters', 400);
   }
 
   return {
@@ -89,27 +90,27 @@ export const validateChangePassword = ( data: ChangePasswordData) => {
   const { oldPassword, newPassword } = data;
 
   if (!oldPassword || !newPassword) {
-    throw new Error('All fields are required');
+    throw new AppError('All fields are required', 400);
   }
 
   if (
     typeof oldPassword !== 'string' || 
     typeof newPassword !== 'string'
   ) {
-    throw new Error('Invalid password data');
+    throw new AppError('Please enter your current password and new password', 400);
   }
 
   if (oldPassword === newPassword) {
-    throw new Error('Try enter a new password');
+    throw new AppError('New password must be different from your current password.', 400);
   }
 
   if ( newPassword.length < 8 ) {
-    throw new Error('Password must have at least 8 characters');
+    throw new AppError('Password must have at least 8 characters', 400);
   }
 
   if (!passwordRegex.test(newPassword)) {
-    throw new Error(
-      'Password must be at least 8 characters and contain a number and special character'
+    throw new AppError(
+      'Please enter a valid password', 400
     );
   }
 

@@ -1,4 +1,5 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
+import { AppError } from "../errors/AppError.js";
 import type { ChangePasswordData, SignUpData } from '../types/auth.types.js';
 import * as authService from './auth.service.js';
 import * as emailVerificationService from '../email/email-verification.service.js';
@@ -15,44 +16,48 @@ export const signUp = async (req: Request<{}, {}, SignUpData>, res: Response) =>
   }
 }
 
-export const verifyEmail = async (req: Request, res: Response) => {
-  const token = req.query.token;
+export const verifyEmail = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const token = req.query.token;
 
-  console.log(token);
+    if (typeof token !== 'string') {
+      throw new AppError('Invalid verification token', 400);
+    }
 
-  if (typeof token !== 'string') {
-    return res.status(400).json({
-      message: 'Invalid verification token'
+    await emailVerificationService.verifyToken(token);
+
+    return res.status(200).json({
+      message: 'Your email has been verified'
     });
+  } catch (error) {
+    next(error);
   }
-
-  await emailVerificationService.verifyToken(token);
-
-  return res.status(200).json({
-    message: 'Your email has been verified'
-  });
 }
 
 export const resendEmailVerification = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
-  const { email } = req.body;
+  try {
+    const { email } = req.body;
 
-  if (!email) {
-    return res.status(400).json({
-      message: 'Email is required'
+    if (!email) {
+      throw new AppError('Email is required', 400);
+    }
+
+    await emailVerificationService.resendEmailVerification(email);
+
+    return res.status(200).json({
+      message:
+        'If an account with that email exists, a verification email has been sent.'
     });
+  } catch (error) {
+    next(error);
   }
-
-  await emailVerificationService.resendEmailVerification(email);
-
-  return res.status(200).json({
-    message: 'If an account with that email exists, a verification email has been sent.'
-  });
 };
 
-export const signIn = async (req: Request, res: Response) => {
+export const signIn = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await authService.signIn(req.body);
 
@@ -67,13 +72,11 @@ export const signIn = async (req: Request, res: Response) => {
     })
 
   } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Something went wrong'
-    });
+    next(error)
   }
 }
 
-export const signOut = (req: Request, res: Response) => {
+export const signOut = (req: Request, res: Response, next: NextFunction) => {
   try {
     res.clearCookie('accessToken');
 
@@ -81,20 +84,16 @@ export const signOut = (req: Request, res: Response) => {
       message: 'Signed out successful'
     })
   } catch (error) {
-    return res.status(500).json({
-      message: error instanceof Error ? error.message : 'Something went wrong'
-    })
+    next(error)
   }
 }
 
-export const ChangePassword = async (req: Request<{}, {}, ChangePasswordData>, res: Response) => {
+export const ChangePassword = async (req: Request<{}, {}, ChangePasswordData>, res: Response, next: NextFunction) => {
   const userId = req.userId;
 
   try {
     if (!userId) {
-      return res.status(401).json({
-        message: 'Authentication required'
-      });
+      throw new AppError('Authentication required', 401);
     }
 
     const passwordData = {
@@ -108,8 +107,6 @@ export const ChangePassword = async (req: Request<{}, {}, ChangePasswordData>, r
       message: "Password changed successfully"
     });
   } catch (error) {
-    return res.status(500).json({
-      message: error instanceof Error ? error.message : 'Something went wrong'
-    });
+    next(error);
   }
 }

@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import { AppError } from '../errors/AppError.js';
 import crypto from 'crypto';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -16,13 +16,13 @@ export const hashVerificationToken = (token: string): string => {
 
 export const validateEmail = (email: string): string => {
   if (typeof email !== 'string') {
-    throw new Error('Email must be a string');
+    throw new AppError('Email must be a string', 400);
   }
 
   const normalizedEmail = email.trim().toLowerCase();
 
   if (!emailRegex.test(normalizedEmail)) {
-    throw new Error('Enter a valid email');
+    throw new AppError('Enter a valid email', 400);
   }
 
   return normalizedEmail;

@@ -1,3 +1,4 @@
+import { AppError } from '../errors/AppError.js';
 import type { PublicUser } from '../types/user.types.js';
 import type { 
   SignUpData, SignInData, ChangePasswordData 
@@ -19,7 +20,7 @@ export const signUp = async (data: SignUpData) => {
   const existingEmail = await authRepo.findUserByEmail(validatedData.email);
 
   if (existingEmail) {
-    throw new Error('Email already exists. Please use another email.');
+    throw new AppError('Email already exists. Please use another email.', 409);
   }
 
   const hashedPassword = await hashPassword(validatedData.password);
@@ -47,14 +48,14 @@ export const signIn = async (data: SignInData) => {
   const existingEmail = await authRepo.findUserByEmail(validatedData.email);
 
   if (!existingEmail) {
-    throw new Error("Invalid email or password")
+    throw new AppError('Invalid email or password', 400);
   };
 
   // compare the provided password against the hashed password in the db
   const isPasswordValid = await comparePassword(validatedData.password, existingEmail.password);
 
   if (!isPasswordValid) {
-    throw new Error('Invalid email or password');
+    throw new AppError('Invalid email or password', 400);
   }
 
   const updatedUser = await authRepo.updateLastLogin(existingEmail.id);
@@ -75,14 +76,14 @@ export const ChangePassword = async ({ data, userId}: {data: ChangePasswordData,
   const userPassword = await authRepo.getUserPasswordById(userId);
 
   if (!userPassword) {
-    throw new Error("User doesn't exist");
+    throw new AppError("User not found", 404);
   }
 
   // compare userPassword with the old password from user input
   const validPassword = await comparePassword(validatedData.oldPassword, userPassword);
 
   if (!validPassword) {
-    throw new Error('Wrong password');
+    throw new AppError('Wrong password', 400);
   }
 
   // hash new dashboard

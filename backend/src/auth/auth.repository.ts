@@ -1,4 +1,5 @@
 import { pool } from '../config/db.js';
+import { AppError } from "../errors/AppError.js";
 import type { User} from '../types/user.types.js';
 import type { NewPasswordData, SignUpData } from '../types/auth.types.js';
 
@@ -29,7 +30,7 @@ export const verifyUserEmail = async (userId: string) => {
   );
 
   if (result.rows.length === 0) {
-    throw new Error('User not found');
+    throw new AppError('User not found', 404);
   }
 
   return result.rows[0];

@@ -1,3 +1,4 @@
+import { AppError } from '../errors/AppError.js';
 import { 
   generateVerificationToken, hashVerificationToken, 
   validateEmail
@@ -40,7 +41,7 @@ export const verifyToken = async (token: string) => {
 
   // handle if token does not exist
   if (!validTokenData) {
-    throw new Error('Invalid or expired verification token');
+    throw new AppError('Invalid or expired verification token', 400);
   }
 
   // Check if token has expired
@@ -50,7 +51,7 @@ export const verifyToken = async (token: string) => {
       hashedToken
     );
 
-    throw new Error('Verification token has expired');
+    throw new AppError('Verification token has expired', 400);
   }
 
   // Mark user's email as verified
@@ -76,11 +77,11 @@ export const resendEmailVerification = async (email: string) => {
   const user = await authRepo.findUserByEmail(validatedEmail);
 
   if (!user) {
-    throw new Error('User not found');
+    throw new AppError('User not found', 404);
   }
 
   if (user.email_verified) {
-    throw new Error('Email is already verified');
+    throw new AppError('Email is already verified', 409);
   }
 
   await emailVerificationRepo.deleteTokenByUserId(user.id)

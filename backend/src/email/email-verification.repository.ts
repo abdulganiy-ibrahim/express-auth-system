@@ -1,4 +1,5 @@
 import { pool } from "../config/db.js";
+import { AppError } from "../errors/AppError.js";
 import type { CreateEmailVerificationData, EmailVerificationData } from "../types/email-verification.types.js";
 
 export const createEmailVerificationToken = async (data: CreateEmailVerificationData) => {
