@@ -22,7 +22,7 @@ export function useLogout() {
       return;
     }
 
-    router.push('/signin');
+    router.push('/signup');
   }
 
   return {
