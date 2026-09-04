@@ -2,12 +2,14 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { Eye, EyeOff } from 'lucide-react';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SignInForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -61,16 +63,16 @@ export default function SignInForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-5xl bgbackground-card border border-border rounded-xl py-4 px-6"
+      className="max-w-md md:max-w-lg lg:max-w-xl w-full h-fit mx-auto bg-background-card rounded-2xl shadow-sm py-8 px-8 md:px-12"
     >
-      <section className='flex flex-col items-center'>
-        <h1 className='text-2xl text-primary font-semibold'>Welcome Back!</h1>
-        <p className='text-primary'>Sign In to continue</p>
+      <section className='flex flex-col items-center text-center mb-8'>
+        <h1 className='text-2xl font-semibold text-primary tracking-tight'>Welcome back</h1>
+        <p className='mt-1 text-sm text-muted-foreground'>Sign in to continue</p>
       </section>
 
-      <section className="mt-6">
-        <div className="flex flex-col gap-1 mb-4">
-          <label htmlFor="email" className="text-base text-muted-foreground">Email</label>
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="email" className="text-sm font-medium text-muted-foreground">Email</label>
           <input 
             id="email"
             name="email"
@@ -78,27 +80,35 @@ export default function SignInForm() {
             placeholder="Enter your email"
             value={formData.email}
             onChange={handleInputChange}
-            className="p-2 border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="p-2.5 border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           />
         </div>
 
-        <div className="flex flex-col gap-1 mb-4">
-          <label htmlFor="password" className="text-base text-muted-foreground">Password</label>
+        <div className="relative flex flex-col gap-1.5">
+          <label htmlFor="password" className="text-sm font-medium text-muted-foreground">Password</label>
           <input 
             id="password"
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleInputChange}
-            className="p-2 border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="p-2.5 pr-10 border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-2.5 top-9 text-muted-foreground hover:text-primary transition-colors"
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
         </div>
 
-        <div className='mx-auto'>
+        <div className='mx-auto w-full mt-2'>
           <button
             type="submit" 
-            className="bg-primary text-white w-full py-2 rounded-full hover:bg-p-bg-hover transition-all duration-300"
+            disabled={isLoading}
+            className="bg-primary text-white w-full py-2.5 rounded-full hover:bg-p-bg-hover transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Signing in...' : 'Sign in'}
           </button>
