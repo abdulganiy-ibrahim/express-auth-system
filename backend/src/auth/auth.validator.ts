@@ -118,3 +118,23 @@ export const validateChangePassword = ( data: ChangePasswordData) => {
     ...data
   }
 }
+
+export const validatePassword = (password: string) => {
+  if (!password) {
+    throw new AppError('Password is required', 400);
+  }
+
+  if (typeof password !== 'string') {
+    throw new AppError('Please enter a valid password', 400);
+  }
+
+  if (password.length < 8) {
+    throw new AppError('Password must have at least 8 characters', 400);
+  }
+
+  if (!passwordRegex.test(password)) {
+    throw new AppError('Please enter a valid password', 400);
+  }
+
+  return password;
+}

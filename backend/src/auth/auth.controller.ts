@@ -110,3 +110,69 @@ export const ChangePassword = async (req: Request<{}, {}, ChangePasswordData>, r
     next(error);
   }
 }
+
+export const requestPasswordReset = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const email = req.body.email;
+
+    if (!email) {
+      throw new AppError('Email is required', 400);
+    }
+
+    await authService.requestPasswordReset(email);
+
+    return res.status(200).json({
+      message: "If an account with that email exists, an OTP code has been sent to the email."
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const verifyPasswordOTP = async (req: Request<{}, {}, { otp: string }>, res: Response, next: NextFunction) => {
+  try {
+    const { otp } = req.body;
+
+    if (!otp) {
+      throw new AppError('OTP is required', 400);
+    }
+    
+    const result = await authService.verifyPasswordOTP(otp);
+
+    res.cookie('passwordResetToken', result.resetToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: "lax",
+      maxAge: 10 * 60 * 1000,
+    });
+    
+    return res.status(200).json({
+      message: "OTP verified successfully"
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const resetToken = req.cookies.passwordResetToken;
+
+  try {
+    if (!resetToken) {
+      throw new AppError('Reset token is required', 400);
+    }
+
+    const resetPasswordData = {
+      resetToken,
+      newPassword: req.body.newPassword
+    }
+
+    await authService.resetPassword(resetPasswordData);
+
+    return res.status(200).json({
+      message: "Password reset successfully"
+    });
+  } catch (error) {
+    next(error);
+  }
+}
