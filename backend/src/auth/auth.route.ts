@@ -3,13 +3,14 @@ import Router from "express";
 import { signUp, verifyEmail, resendEmailVerification, signIn, signOut, ChangePassword, requestPasswordReset, verifyPasswordOTP, resetPassword } from "./auth.controller.js";
 // auth.middleware.js
 import { authMiddleware } from "../middleware/auth.middleware.js";
+import { signinLimiter } from "../middleware/security/rate-limit.js";
 
 const router = Router();
 
 router.post('/signup', signUp);
 router.post('/verify-email', verifyEmail);
 router.post('/resend-email-verification', resendEmailVerification)  
-router.post('/signin', signIn);
+router.post('/signin', signinLimiter, signIn);
 router.get('/signout', signOut);
 router.patch('/changePassword', authMiddleware, ChangePassword);
 router.post('/forgot-password', requestPasswordReset);
